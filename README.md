@@ -23,7 +23,7 @@ It is assumed that
 - Click the green button Clone or download on the right side.
 - From the pop-up choose Download ZIP.
 - In Arduino IDE, select Sketch > Include Library > Manage Libraries ... and browse to the just downloaded ZIP file.
-- When the IDE is ready this README.md should be located at e.g. `C:\Users\sciosense\Documents\Arduino\libraries\ScioSense_ens145\README.md`.
+- When the IDE is ready this README.md should be located at e.g. `C:\Users\sciosense\Documents\Arduino\libraries\ScioSense_ENS145\README.md`.
 
 ## Build an example
 To build an example sketch
