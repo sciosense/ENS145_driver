@@ -1,8 +1,8 @@
-# ScioSense ENS145
-Arduino library for the ENS145 analog MOX gas sensor from ScioSense
+# ScioSense ENS145 Development Shield
+Arduino library for the ENS145 Development Shield (analog MOX gas sensor) from ScioSense
 
 ## Introduction
-This project is an Arduino *library*. It implements a driver with example for the ENS145.
+This project is an Arduino *library*. It implements a driver with examples for the ENS145 Development Shield.
 The ENS145 is a analog gas sensor.
 The driver in this Arduino library is based on the code supplied by *Sciosense*, the manufacturer of the chip.
 
@@ -23,12 +23,12 @@ It is assumed that
 - Click the green button Clone or download on the right side.
 - From the pop-up choose Download ZIP.
 - In Arduino IDE, select Sketch > Include Library > Manage Libraries ... and browse to the just downloaded ZIP file.
-- When the IDE is ready this README.md should be located at e.g. `C:\Users\sciosense\Documents\Arduino\libraries\ScioSense_ENS145\README.md`.
+- When the IDE is ready this README.md should be located at e.g. `C:\Users\sciosense\Documents\Arduino\libraries\ScioSense_ens145\README.md`.
 
 ## Build an example
 To build an example sketch
  - (Re)start Arduino.
- - Open File > Example > Examples from Custom Libraries > ENS145 > ENS145basic
+ - Open File > Example > Examples from Custom Libraries > ENS145 > ENS145_basic_read
  - Make sure Tools > Board lists the correct board.
  - Select Sketch > Verify/Compile.
 
