@@ -32,7 +32,6 @@
 #define ENS145_ENABLE_PIN_RS1				5
 #define ENS145_ENABLE_PIN_RS3				12
 #if (defined(ADAFRUIT_FEATHER_M0))
-
 	#define ENS145_ADC_CHANNEL_RH1				A5
 	#define ENS145_ADC_CHANNEL_RS1				A4
 	#define ENS145_AREF							AR_EXTERNAL
@@ -58,6 +57,7 @@ class ScioSense_ENS145 {
 	    ScioSense_ENS145();   			// Constructor 
 		
 		bool 				begin(uint16_t adc, bool debug);
+		bool 				available() {return this->_available; }
 
 		bool				setHeaterVoltage(uint8_t hotplate, uint16_t mVolts);
 
@@ -68,7 +68,8 @@ class ScioSense_ENS145 {
 
 		uint16_t			measureSensorVoltage(uint8_t hotplate);
 		uint32_t			measureSensorResistance(uint8_t hotplate);
-
+		uint16_t			_adcIn[2][2];
+		
 	private:
 		uint16_t			mVoltsToDACvalue(uint16_t voltage);
 		bool				setDACvalue(uint8_t i2cAddr, uint16_t dacValue);
@@ -79,12 +80,14 @@ class ScioSense_ENS145 {
 		
 		uint16_t			_enableRS[2] = {ENS145_ENABLE_PIN_RS1, ENS145_ENABLE_PIN_RS3};
 		uint16_t			_adcChannel[2][2] = {{ENS145_ADC_CHANNEL_RH1, ENS145_ADC_CHANNEL_RH3} , {ENS145_ADC_CHANNEL_RS1, ENS145_ADC_CHANNEL_RS3}};
+		uint16_t			_adcOut[2][2];
 		uint32_t			_shuntRS[2] = {ENS145_SHUNT_RS1, ENS145_SHUNT_RS3};
 		uint32_t			_shuntRH[2] = {ENS145_SHUNT_RH1, ENS145_SHUNT_RH3};
 		uint8_t			    _addressDAC[2] = {ENS145_I2CADDR_HP1_DAC, ENS145_I2CADDR_HP3_DAC};
 		uint16_t			_adcRes = ENS145_ADC_RESOLUTION;
 		
 		bool				_debugENS145 = false;
+		bool				_available = false;
 };
 
 

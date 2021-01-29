@@ -16,12 +16,12 @@ ScioSense_ENS145::ScioSense_ENS145() {
 
 // Initializes ENS145, set pin suitable modes, start I2C communciation with DACs
 bool ScioSense_ENS145::begin(uint16_t adc, bool debug) {
-	
 	this->_adcRes = adc; 
 	this->_debugENS145 = debug;
 
 	//Set pins 
 	if (this->_debugENS145) Serial.println("ENS145debug: set pin modes");
+	
 	
 	pinMode(ENS145_ENABLE_PIN_RS1, OUTPUT);
 	digitalWrite(ENS145_ENABLE_PIN_RS1, HIGH);			//Set to high to deactivate channel
@@ -37,11 +37,13 @@ bool ScioSense_ENS145::begin(uint16_t adc, bool debug) {
 	analogReference(ENS145_AREF);
 	
 	//Set heater to 0 for initialisation
-	this->setHeaterVoltage(ENS145_HP1, 0);
-	this->setHeaterVoltage(ENS145_HP3, 0);
-	if (this->_debugENS145) Serial.println("ENS145debug: Heater initially set to 0");
+	this->_available = this->setHeaterVoltage(ENS145_HP1, 0);
+	if  (this->_available) {
+		this->_available = this->setHeaterVoltage(ENS145_HP3, 0);
+	}
+	if (this->_debugENS145) Serial.println(this->_available ? "ENS145debug: Heater initially set to 0" : "ENSdebug: Setup failed");
 
-	return true;
+	return this->_available;
 }
 
 //-----------------------------------------------------------------------------------
@@ -98,19 +100,18 @@ bool ScioSense_ENS145::setHeaterVoltage(uint8_t hotplate, uint16_t mVolts) {
 
 // Measure heater voltage in [mV]
 uint16_t ScioSense_ENS145::measureHeaterVoltage(uint8_t hotplate) {
-	uint16_t reading;
-	
+
 	for (int i=0; i<10; i++) {
 		delay(1);
-		reading = analogRead(this->_adcChannel[0][hotplate]);
+		this->_adcIn[0][hotplate] = analogRead(this->_adcChannel[0][hotplate]);
 	}
 
 	if (this->_debugENS145) {
 		Serial.print("Analog read: ");
-		Serial.println(reading);
+		Serial.println(this->_adcIn[0][hotplate]);
 	}
 	
-	return (uint16_t)(((uint32_t)reading * (uint32_t)this->_voltRef) / (uint32_t)this->_adcRes);
+	return (uint16_t)(((uint32_t)this->_adcIn[0][hotplate] * (uint32_t)this->_voltRef) / (uint32_t)this->_adcRes);
 }
 
 // Measure heater resistance in [Ohm]
@@ -125,23 +126,22 @@ float ScioSense_ENS145::measureHeaterResistance(uint8_t hotplate){
 
 // Measure sensor voltage in [mV]
 uint16_t ScioSense_ENS145::measureSensorVoltage(uint8_t hotplate){
-	uint16_t reading;
 
 	digitalWrite(this->_enableRS[hotplate], LOW);
 	for (int i=0; i<10; i++) {
 		delay(1);
-		reading = analogRead(this->_adcChannel[1][hotplate]);
+		this->_adcIn[1][hotplate] = analogRead(this->_adcChannel[1][hotplate]);
 	}
 	digitalWrite(this->_enableRS[hotplate], HIGH);
 		
 	if (this->_debugENS145) {
 		Serial.print("Analog read: ");
-		Serial.println(reading);
+		Serial.println(this->_adcIn[1][hotplate]);
 	}
 	
 	//return (reading * this->_voltRef / this->_adcRes);
 	//return (reading * 3.222); // in millivolts
-	return (uint16_t)(((uint32_t)reading * (uint32_t)this->_voltRef) / (uint32_t)this->_adcRes);
+	return (uint16_t)(((uint32_t)this->_adcIn[1][hotplate] * (uint32_t)this->_voltRef) / (uint32_t)this->_adcRes);
 }
 
 // Measure sensor resistance in [Ohm]
