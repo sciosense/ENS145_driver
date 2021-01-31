@@ -33,6 +33,7 @@ void setup() {
       delay(500);   
     }
   } 
+  ens145.setADCcorrection(1.1);
   Serial.println("done!");
   
   // Set voltage of heaters for operation 
@@ -60,30 +61,22 @@ void setup() {
 
 void loop() {
 
-  if (ens145.available()) {
-    Serial.print("ENS145 HP1:");
-    Serial.print("\t");
-    Serial.print(ens145.measureHeaterVoltage(ENS145_HP1));
-    Serial.print(" mV\t");
-    Serial.print(ens145.measureHeaterResistance(ENS145_HP1));     //expected below 100Ohm
-    Serial.print(" Ohm\t");
-    Serial.print(ens145.measureSensorVoltage(ENS145_HP1));
-    Serial.print(" mV\t");
-    Serial.print(ens145.measureSensorResistance(ENS145_HP1));     //expected up to 1MOhm
-    Serial.print(" Ohm\t");
-  
-    Serial.print("ENS145 HP3:");
-    Serial.print("\t");
-    Serial.print(ens145.measureHeaterVoltage(ENS145_HP3));
-    Serial.print(" mV\t");
-    Serial.print(ens145.measureHeaterResistance(ENS145_HP3));     //expected below 100Ohm
-    Serial.print(" Ohm\t");
-    Serial.print(ens145.measureSensorVoltage(ENS145_HP3));        //expected up to 1MOhm
-    Serial.print(" mV\t");
-    Serial.print(ens145.measureSensorResistance(ENS145_HP3));
-    Serial.print(" Ohm\t");
+ if (ens145.available()) {
+    ens145.measure();
+    
+    Serial.print("R heater1: ");
+    Serial.print(ens145.getHeaterResistance(ENS145_HP1));     //expected below 100Ohm
+    Serial.print(" Ohm\tR sensor1: ");
+    Serial.print(ens145.getSensorResistance(ENS145_HP1));     //expected up to 1MOhm
+    Serial.print(" Ohm\t|\t");
+    
+    Serial.print("R heater3: ");
+    Serial.print(ens145.getHeaterResistance(ENS145_HP3));     //expected below 100Ohm
+    Serial.print(" Ohm\tR sensor3: ");
+    Serial.print(ens145.getSensorResistance(ENS145_HP3));
+    Serial.println(" Ohm");
   }
-  
+    
   if (ens210.available()) {
     ens210.measure();
     Serial.print("ENS210:");

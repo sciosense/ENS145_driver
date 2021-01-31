@@ -14,30 +14,34 @@
 #######################################
 ENS145				KEYWORD1
 ens145				KEYWORD1
-sciosense_ens145	KEYWORD1
-Sciosense_ens145	KEYWORD1
-ScioSense_ens145	KEYWORD1
-sciosense_ENS145	KEYWORD1
-Sciosense_ENS145	KEYWORD1
-ScioSense_ENS145	KEYWORD1
-SCIOSENSE_ENS145	KEYWORD1
+sciosense_ens145		KEYWORD1
+Sciosense_ens145		KEYWORD1
+ScioSense_ens145		KEYWORD1
+sciosense_ENS145		KEYWORD1
+Sciosense_ENS145		KEYWORD1
+ScioSense_ENS145		KEYWORD1
+SCIOSENSE_ENS145		KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
-begin					KEYWORD2
+begin				KEYWORD2
+available			KEYWORD2
+setADCcorrection		KEYWORD2
 setHeaterVoltage		KEYWORD2
 
-measureHeaterVoltage	KEYWORD2
-measureHeaterResistance	KEYWORD2
-
-measureSensorVoltage	KEYWORD2
-measureSensorResistance	KEYWORD2
+measure				KEYWORD2
+getADCvalue			KEYWORD2
+getHeaterVoltage		KEYWORD2
+getSensorVoltage		KEYWORD2
+getHeaterResistance		KEYWORD2
+getSensorResistance		KEYWORD2
 
 ######################################
 # Constants (LITERAL1)
 #######################################
 
-ENS145_HP1					LITERAL1
-ENS145_HP3					LITERAL1
+ENS145_HP1			LITERAL1
+ENS145_HP3			LITERAL1
+ENS145_ADC_RESOLUTION		LITERAL1
 NEO_PIXEL_DATA_INPUT_PIN	LITERAL1

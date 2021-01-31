@@ -32,15 +32,15 @@
 #define ENS145_ENABLE_PIN_RS1				5
 #define ENS145_ENABLE_PIN_RS3				12
 #if (defined(ADAFRUIT_FEATHER_M0))
-	#define ENS145_ADC_CHANNEL_RH1				A5
-	#define ENS145_ADC_CHANNEL_RS1				A4
-	#define ENS145_AREF							AR_EXTERNAL
-	#define ENS145_REFERENCE_VOLTAGE			3300
+	#define ENS145_ADC_CHANNEL_RH1			A5
+	#define ENS145_ADC_CHANNEL_RS1			A4
+	#define ENS145_AREF						AR_EXTERNAL
+	#define ENS145_REFERENCE_VOLTAGE		3300
 #else 
-	#define ENS145_ADC_CHANNEL_RH1				A1
-	#define ENS145_ADC_CHANNEL_RS1				A0
-	#define ENS145_AREF							EXTERNAL
-	#define ENS145_REFERENCE_VOLTAGE			3300
+	#define ENS145_ADC_CHANNEL_RH1			A1
+	#define ENS145_ADC_CHANNEL_RS1			A0
+	#define ENS145_AREF						EXTERNAL
+	#define ENS145_REFERENCE_VOLTAGE		3300
 #endif
 	
 #define ENS145_ADC_CHANNEL_RH3				A3
@@ -57,34 +57,46 @@ class ScioSense_ENS145 {
 	    ScioSense_ENS145();   			// Constructor 
 		
 		bool 				begin(uint16_t adc, bool debug);
-		bool 				available() {return this->_available; }
-
+		bool 				available() { return this->_available; }
+		
+		void				setADCcorrection(float factor) { this->_adcCorrection = factor; }
+		
 		bool				setHeaterVoltage(uint8_t hotplate, uint16_t mVolts);
+			
+		bool				measure();
 
-		bool				setHeaterResistance(uint8_t hotplate, uint16_t targetRes);
+		uint16_t			getADCvalue(uint8_t element, uint8_t hotplate) { return this->_adcIn[element][hotplate]; }
+		
+		uint16_t			getHeaterVoltage(uint8_t hotplate) { return this->_voltIn[0][hotplate]; }
+		uint16_t			getSensorVoltage(uint8_t hotplate) { return this->_voltIn[1][hotplate]; }
 
-		uint16_t			measureHeaterVoltage(uint8_t hotplate);
-		float				measureHeaterResistance(uint8_t hotplate);
-
-		uint16_t			measureSensorVoltage(uint8_t hotplate);
-		uint32_t			measureSensorResistance(uint8_t hotplate);
-		uint16_t			_adcIn[2][2];
+		uint32_t			getHeaterResistance(uint8_t hotplate) { return this->_resIn[0][hotplate]; }
+		uint32_t			getSensorResistance(uint8_t hotplate) { return this->_resIn[1][hotplate]; }
 		
 	private:
 		uint16_t			mVoltsToDACvalue(uint16_t voltage);
 		bool				setDACvalue(uint8_t i2cAddr, uint16_t dacValue);
 		
-		uint16_t			_voltRef = ENS145_REFERENCE_VOLTAGE;
-		uint16_t			_voltHP[2] = {0,0};
-		uint16_t			_resHP[2] = {0,0};
+		bool				measureHeater(uint8_t hotplate);
+
+		bool				measureSensor(uint8_t hotplate);
 		
-		uint16_t			_enableRS[2] = {ENS145_ENABLE_PIN_RS1, ENS145_ENABLE_PIN_RS3};
-		uint16_t			_adcChannel[2][2] = {{ENS145_ADC_CHANNEL_RH1, ENS145_ADC_CHANNEL_RH3} , {ENS145_ADC_CHANNEL_RS1, ENS145_ADC_CHANNEL_RS3}};
-		uint16_t			_adcOut[2][2];
-		uint32_t			_shuntRS[2] = {ENS145_SHUNT_RS1, ENS145_SHUNT_RS3};
-		uint32_t			_shuntRH[2] = {ENS145_SHUNT_RH1, ENS145_SHUNT_RH3};
-		uint8_t			    _addressDAC[2] = {ENS145_I2CADDR_HP1_DAC, ENS145_I2CADDR_HP3_DAC};
-		uint16_t			_adcRes = ENS145_ADC_RESOLUTION;
+		uint8_t			    _addressDAC[2] 		= {ENS145_I2CADDR_HP1_DAC, ENS145_I2CADDR_HP3_DAC};
+		uint16_t			_voltRef 			= ENS145_REFERENCE_VOLTAGE;
+		uint16_t			_voltHP[2] 			= {0,0};
+		uint16_t			_voltDAC[2] 		= {0,0};
+		uint16_t			_adcOut[2]			= {0,0};
+
+		uint16_t			_adcChannel[2][2] 	= {{ENS145_ADC_CHANNEL_RH1, ENS145_ADC_CHANNEL_RH3} , {ENS145_ADC_CHANNEL_RS1, ENS145_ADC_CHANNEL_RS3}};
+		uint16_t			_adcRes 			= ENS145_ADC_RESOLUTION;
+		float				_adcCorrection 		= 1.1;
+		uint16_t			_adcIn[2][2] 		= {{0,0},{0,0}};
+		uint16_t			_voltIn[2][2] 		= {{0,0},{0,0}};
+		uint32_t			_resIn[2][2] 		= {{0,0},{0,0}};
+		
+		uint16_t			_enableRS[2] 		= {ENS145_ENABLE_PIN_RS1, ENS145_ENABLE_PIN_RS3};
+		uint32_t			_shuntRS[2] 		= {ENS145_SHUNT_RS1, ENS145_SHUNT_RS3};
+		uint32_t			_shuntRH[2] 		= {ENS145_SHUNT_RH1, ENS145_SHUNT_RH3};
 		
 		bool				_debugENS145 = false;
 		bool				_available = false;
