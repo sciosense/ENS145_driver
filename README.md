@@ -1,4 +1,7 @@
 # ScioSense ENS145 Development Shield
+
+> :warning: This library is deprecated and no longer maintained.
+
 Arduino library for the ENS145 Development Shield (analog MOX gas sensor) from ScioSense
 ![ENS145 Development Shield](https://github.com/sciosense/ENS145_driver/blob/main/ENS145_Dev_Shield_Full.JPG)
 
